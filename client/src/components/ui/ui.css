@@ -1,26 +1,24 @@
-/* Buttons */
+/* ========================
+   Buttons
+======================== */
 
 .btn {
   all: unset;
+  display: inline-block;
+  padding: 0.5rem 3rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--color-white);
   border: 2px solid;
   border-radius: 2rem;
-  -webkit-border-radius: 2rem;
-  -moz-border-radius: 2rem;
-  -ms-border-radius: 2rem;
-  -o-border-radius: 2rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, .25);
-  color: var(--color-white);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
   cursor: pointer;
-  display: inline-block;
-  font-weight: bold;
-  padding: .5rem 3rem;
-  text-transform: uppercase;
-  transition: transform 0.3s;
-  -webkit-transition: transform 0.3s;
-  -moz-transition: transform 0.3s;
-  -ms-transition: transform 0.3s;
-  -o-transition: transform 0.3s;
   user-select: none;
+  transition: transform 0.3s ease;
+}
+
+.btn:active {
+  transform: scale(0.95);
 }
 
 .btn--block {
@@ -30,32 +28,20 @@
 }
 
 .btn--floating {
-  border-radius: 50%;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  -ms-border-radius: 50%;
-  -o-border-radius: 50%;
+  position: fixed;
   bottom: 2rem;
   display: flex;
-  font-size: 1.3em;
   padding: 1rem;
-  position: fixed;
-}
-
-.btn--floating-right {
-  right: 2rem;
+  font-size: 1.3em;
+  border-radius: 50%;
 }
 
 .btn--floating-left {
   left: 2rem;
 }
 
-.btn:active {
-  transform: scale(0.95);
-  -webkit-transform: scale(0.95);
-  -moz-transform: scale(0.95);
-  -ms-transform: scale(0.95);
-  -o-transform: scale(0.95);
+.btn--floating-right {
+  right: 2rem;
 }
 
 .btn-primary {
@@ -68,33 +54,37 @@
   border-color: var(--color-white);
 }
 
-/* Navbar */
+
+/* ========================
+   Navbar
+======================== */
 
 .navbar {
+  display: flex;
   align-items: center;
   background-color: var(--color-primary);
-  margin-bottom: 1rem;
   height: 50px;
+  margin-bottom: 1rem;
 }
 
 .navbar__list {
-  align-items: center;
   display: flex;
-  height: 100%;
+  align-items: center;
   justify-content: space-between;
-  margin: auto 0;
+  height: 100%;
   padding: 0 2rem;
+  width: 100%;
 }
 
 .navbar__item {
-  color: var(--color-white);
   display: flex;
+  color: var(--color-white);
   font-size: 1.3em;
 }
 
 .navbar__text {
   font-weight: bold;
-  margin: 0 0 0 1rem;
+  margin-left: 1rem;
   text-transform: capitalize;
 }
 
@@ -106,17 +96,18 @@
   color: var(--color-dark-gray);
 }
 
+
+/* ========================
+   Alerts
+======================== */
+
 .alert {
+  width: 100%;
+  padding: 0.5rem 1rem;
   border: 1px solid;
   border-radius: 0.25rem;
-  -webkit-border-radius: 0.25rem;
-  -moz-border-radius: 0.25rem;
-  -ms-border-radius: 0.25rem;
-  -o-border-radius: 0.25rem;
   margin-bottom: 1rem;
-  padding: .5rem 1rem;
   text-align: left;
-  width: 100%;
 }
 
 .alert__title {
