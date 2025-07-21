@@ -6,24 +6,23 @@ import DeleteIcon from "./icons/DeleteIcon";
 const DeleteBtn = () => {
   const dispatch = useDispatch();
 
-  const confirmDeletion = async () => {
-    const result = await Swal.fire({
-      title: "Delete event",
-      text: "Do you want to delete the selected event?",
+  const handleClickDelete = () => {
+    Swal.fire({
+      title: "Xoá sự kiện",
+      text: "Bạn có muốn xoá sự kiện đã chọn không?",
       icon: "warning",
-      confirmButtonText: "Yes, delete!",
+      confirmButtonText: "Vâng, xoá!",
+      cancelButtonText: "Huỷ", // <- Thêm dòng này để nút Huỷ hiển thị đúng tiếng Việt
       showCancelButton: true,
+    }).then(({ isConfirmed }) => {
+      if (isConfirmed) dispatch(eventStartDelete());
     });
-
-    if (result.isConfirmed) {
-      dispatch(eventStartDelete());
-    }
   };
 
   return (
     <button
       className="btn btn-primary btn--floating btn--floating-left"
-      onClick={confirmDeletion}
+      onClick={handleClickDelete}
     >
       <DeleteIcon />
     </button>

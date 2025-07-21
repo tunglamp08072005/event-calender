@@ -6,30 +6,28 @@ import "./ui.css";
 
 const Navbar = () => {
   const dispatch = useDispatch();
-  const username = useSelector((state) => state.auth.name);
+  const { name } = useSelector((state) => state.auth);
 
-  const handleLogout = () => dispatch(startLogout());
+  const handleLogout = () => {
+    dispatch(startLogout());
+  };
 
   return (
     <nav className="navbar">
       <ul className="navbar__list">
-        <li className="navbar__item">
+        <div className="navbar__item">
           <UserIcon />
-          <span className="navbar__text">{username}</span>
-        </li>
-        <li className="navbar__item">
-          <button
+          <p className="navbar__text">{name}</p>
+        </div>
+        <div className="navbar__item">
+          <LogoutIcon
             className="navbar__link"
             title="Logout"
             onClick={handleLogout}
-            style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
-          >
-            <LogoutIcon />
-          </button>
-        </li>
+          />
+        </div>
       </ul>
     </nav>
   );
 };
-
 export default Navbar;

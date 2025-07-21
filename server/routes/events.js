@@ -34,22 +34,22 @@ router.post(
   "/",
   [
     check("title")
-      .notEmpty().withMessage("Title is required")
-      .isLength({ max: 32 }).withMessage("Title length must be max 32 characters"),
+      .notEmpty().withMessage("Tiêu đề là bắt buộc")
+      .isLength({ max: 32 }).withMessage("Tiêu đề tối đa 32 ký tự"),
 
     check("start")
-      .notEmpty().withMessage("Start date is required")
-      .custom(isDate).withMessage("Invalid start date"),
+      .notEmpty().withMessage("Ngày bắt đầu là bắt buộc")
+      .custom(isDate).withMessage("Ngày bắt đầu không hợp lệ"),
 
     check("end")
-      .notEmpty().withMessage("End date is required")
-      .custom(isDate).withMessage("Invalid end date")
+      .notEmpty().withMessage("Ngày kết thúc là bắt buộc")
+      .custom(isDate).withMessage("Ngày kết thúc không hợp lệ")
       .custom((end, { req }) => isDateAfter(end, req.body.start))
-      .withMessage("End date must be after start date"),
+      .withMessage("Ngày kết thúc phải sau ngày bắt đầu"),
 
     check("notes")
       .optional()
-      .isLength({ max: 128 }).withMessage("Notes length must be max 128 characters"),
+      .isLength({ max: 128 }).withMessage("Ghi chú tối đa 128 ký tự"),
 
     validateFields,
   ],
@@ -61,23 +61,23 @@ router.put(
   "/:id",
   [
     check("id")
-      .isMongoId().withMessage("Invalid event ID."),
+      .isMongoId().withMessage("ID sự kiện không hợp lệ"),
 
     check("title")
-      .notEmpty().withMessage("Title is required")
-      .isLength({ max: 32 }).withMessage("Title length must be max 32 characters"),
+      .notEmpty().withMessage("Tiêu đề là bắt buộc")
+      .isLength({ max: 32 }).withMessage("Tiêu đề tối đa 32 ký tự"),
 
     check("start")
-      .notEmpty().withMessage("Start date is required")
-      .custom(isDate).withMessage("Invalid start date"),
+      .notEmpty().withMessage("Ngày bắt đầu là bắt buộc")
+      .custom(isDate).withMessage("Ngày bắt đầu không hợp lệ"),
 
     check("end")
-      .notEmpty().withMessage("End date is required")
-      .custom(isDate).withMessage("Invalid end date"),
+      .notEmpty().withMessage("Ngày kết thúc là bắt buộc")
+      .custom(isDate).withMessage("Ngày kết thúc không hợp lệ"),
 
     check("notes")
       .optional()
-      .isLength({ max: 128 }).withMessage("Notes length must be max 128 characters"),
+      .isLength({ max: 128 }).withMessage("Ghi chú tối đa 128 ký tự"),
 
     validateFields,
     eventExistsById,
@@ -91,7 +91,7 @@ router.delete(
   "/:id",
   [
     check("id")
-      .isMongoId().withMessage("Invalid event ID."),
+      .isMongoId().withMessage("ID sự kiện không hợp lệ"),
     validateFields,
     eventExistsById,
     isEventOwner,

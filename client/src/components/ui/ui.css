@@ -78,8 +78,10 @@
 
 .navbar__item {
   display: flex;
+  align-items: center;       /* ⬅️ Căn giữa dọc */
   color: var(--color-white);
   font-size: 1.3em;
+  gap: 0.75rem;               /* ⬅️ Khoảng cách giữa icon và text (nên dùng gap thay vì margin-left) */
 }
 
 .navbar__text {

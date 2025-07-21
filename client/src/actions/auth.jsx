@@ -20,11 +20,11 @@ export const startLogin = (email, password) => {
         dispatch(login({ id, name }));
       } else {
         if (data.errors) dispatch(checkingErrors(data.errors));
-        if (data.msg) Swal.fire("Error", data.msg, "error");
+        if (data.msg) Swal.fire("Lỗi", convertMessageToVietnamese(data.msg), "error");
       }
     } catch (error) {
       console.error(error);
-      Swal.fire("Error", "Please, contact the administrator", "error");
+      Swal.fire("Lỗi", "Vui lòng liên hệ với quản trị viên", "error");
     }
   };
 };
@@ -45,11 +45,11 @@ export const startRegister = (name, email, password) => {
         dispatch(login({ id, name }));
       } else {
         if (data.errors) dispatch(checkingErrors(data.errors));
-        if (data.msg) Swal.fire("Error", data.msg, "error");
+        if (data.msg) Swal.fire("Lỗi", convertMessageToVietnamese(data.msg), "error");
       }
     } catch (error) {
       console.error(error);
-      Swal.fire("Error", "Please, contact the administrator", "error");
+      Swal.fire("Lỗi", "Vui lòng liên hệ với quản trị viên", "error");
     }
   };
 };
@@ -58,7 +58,7 @@ export const checkingErrors = (errors) => {
   return (dispatch) => {
     const firstKey = Object.keys(errors)[0];
     const { msg } = errors[firstKey];
-    dispatch(setError(msg));
+    dispatch(setError(convertMessageToVietnamese(msg)));
   };
 };
 
@@ -79,7 +79,7 @@ export const startChecking = () => {
       }
     } catch (error) {
       console.error(error);
-      Swal.fire("Error", "Please, contact the administrator", "error");
+      Swal.fire("Lỗi", "Vui lòng liên hệ với quản trị viên", "error");
     } finally {
       dispatch(checkingFinish());
     }
@@ -107,3 +107,25 @@ export const startLogout = () => {
 export const logout = () => ({
   type: types.authLogout,
 });
+
+// Hàm chuyển thông điệp tiếng Anh sang tiếng Việt (có thể mở rộng thêm)
+const convertMessageToVietnamese = (msg) => {
+  switch (msg) {
+    case "Invalid password":
+      return "Mật khẩu không hợp lệ";
+    case "User does not exist":
+      return "Người dùng không tồn tại";
+    case "Email already in use":
+      return "Email đã được sử dụng";
+    case "Name is required":
+      return "Tên không được để trống";
+    case "Email is required":
+      return "Email không được để trống";
+    case "Password is required":
+      return "Mật khẩu không được để trống";
+    case "Token not valid":
+      return "Token không hợp lệ";
+    default:
+      return msg; // Giữ nguyên nếu không khớp
+  }
+};

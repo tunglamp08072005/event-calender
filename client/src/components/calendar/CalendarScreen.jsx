@@ -1,85 +1,156 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
+import "moment/locale/vi"; // ✅ Thêm dòng này để import locale tiếng Việt
 
 import Navbar from "../ui/Navbar";
 import CalendarEvent from "./CalendarEvent";
-import CalendarModal from "./CalendarModal";
-import AddNewBtn from "../ui/AddNewBtn";
-import DeleteBtn from "../ui/DeleteBtn";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./calendar.css";
-
+import CalendarModal from "./CalendarModal";
+import { useDispatch, useSelector } from "react-redux";
+import { uiOpenModal } from "../../actions/ui";
 import {
-  uiOpenModal,
   eventClearActive,
   eventSetActive,
   eventStartLoading,
-} from "../../actions";
+} from "../../actions/event";
+import AddNewBtn from "../ui/AddNewBtn";
+import DeleteBtn from "../ui/DeleteBtn";
+
+// ✅ Cài đặt locale mặc định cho moment
+moment.locale("vi");
 
 const localizer = momentLocalizer(moment);
 
 const CalendarScreen = () => {
   const dispatch = useDispatch();
+  const { calendar, auth, ui } = useSelector((state) => state);
+  const { events, activeEvent } = calendar;
+  const { id } = auth;
+  const { modalOpen } = ui;
 
-  const { calendar: { events, activeEvent }, auth: { id }, ui: { modalOpen } } = useSelector((state) => state);
+  const [lastView, setLastView] = useState(
+    localStorage.getItem("lastView") || "month"
+  );
 
-  const [lastView, setLastView] = useState(() => localStorage.getItem("lastView") || "month");
+  // 🔍 Tìm kiếm
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredEvents, setFilteredEvents] = useState([]);
 
   useEffect(() => {
     dispatch(eventStartLoading());
   }, [dispatch]);
 
-  const handleDoubleClick = () => dispatch(uiOpenModal());
+  useEffect(() => {
+    setFilteredEvents(
+      events.filter((event) =>
+        event.title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+  }, [searchTerm, events]);
 
-  const handleSelectEvent = (e) => dispatch(eventSetActive(e));
-
-  const handleViewChange = (view) => {
-    setLastView(view);
-    localStorage.setItem("lastView", view);
+  const onDoubleClick = () => {
+    dispatch(uiOpenModal());
   };
 
-  const handleSelectSlot = ({ start, end, action }) => {
-    if (activeEvent) dispatch(eventClearActive());
+  const onSelect = (e) => {
+    dispatch(eventSetActive(e));
+  };
 
-    if (action === "select" || action === "doubleClick") {
-      dispatch(eventSetActive({ title: "", notes: "", start, end }));
+  const onViewChange = (e) => {
+    setLastView(e);
+    localStorage.setItem("lastView", e);
+  };
+
+  const onSelectSlot = (e) => {
+    activeEvent && dispatch(eventClearActive());
+    if (e.action === "select" || e.action === "doubleClick") {
+      dispatch(
+        eventSetActive({
+          title: "",
+          notes: "",
+          start: e.start,
+          end: e.end,
+        })
+      );
       dispatch(uiOpenModal());
     }
   };
 
-  const eventStyleGetter = (event) => ({
-    style: {
+  const eventStyleGetter = (event, start, end, isSelected) => {
+    const style = {
       backgroundColor: id === event.user._id ? "#367CF7" : "#465660",
       opacity: 0.8,
       display: "block",
       color: "white",
-    },
-  });
+    };
+
+    return { style };
+  };
 
   return (
     <div className="calendar">
       <Navbar />
-      <div className="calendar__container">
-        <Calendar
-          localizer={localizer}
-          events={events}
-          startAccessor="start"
-          endAccessor="end"
-          selectable
-          view={lastView}
-          components={{ event: CalendarEvent }}
-          eventPropGetter={eventStyleGetter}
-          onDoubleClickEvent={handleDoubleClick}
-          onSelectEvent={handleSelectEvent}
-          onView={handleViewChange}
-          onSelectSlot={handleSelectSlot}
+
+      {/* 🔍 Ô tìm kiếm */}
+      <div className="calendar__search">
+        <input
+          type="text"
+          placeholder="🔍 Tìm kiếm sự kiện..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="calendar__search-input"
         />
       </div>
 
-      {activeEvent && !modalOpen && <DeleteBtn />}
+      <div className="calendar__container">
+        <Calendar
+          localizer={localizer}
+          events={filteredEvents}
+          startAccessor="start"
+          endAccessor="end"
+          eventPropGetter={eventStyleGetter}
+          onDoubleClickEvent={onDoubleClick}
+          onSelectEvent={onSelect}
+          onView={onViewChange}
+          onSelectSlot={onSelectSlot}
+          selectable={true}
+          view={lastView}
+          components={{ event: CalendarEvent }}
+          messages={{
+            allDay: "Cả ngày",
+            previous: "Trước",
+            next: "Tiếp",
+            today: "Hôm nay",
+            month: "Tháng",
+            week: "Tuần",
+            day: "Ngày",
+            agenda: "Lịch biểu",
+            date: "Ngày",
+            time: "Giờ",
+            event: "Sự kiện",
+            noEventsInRange: "Không có sự kiện nào trong khoảng thời gian này.",
+            showMore: (total) => `+ thêm ${total}`,
+          }}
+        />
+      </div>
+
+      {activeEvent && !modalOpen && (
+        <>
+          <button
+            className="btn btn-primary btn--floating btn--floating-left"
+            style={{ bottom: "5rem" }}
+            onClick={() => dispatch(uiOpenModal())}
+            title="Chỉnh sửa sự kiện"
+          >
+            ✏️
+          </button>
+          <DeleteBtn />
+        </>
+      )}
+
       <AddNewBtn />
       <CalendarModal />
     </div>

@@ -26,12 +26,12 @@ const LoginScreen = () => {
 
   const isFormValid = () => {
     if (!validator.isEmail(email)) {
-      dispatch(setError("Email is not valid"));
+      dispatch(setError("Email không hợp lệ"));
       return false;
     }
 
     if (!password.trim()) {
-      dispatch(setError("Password is required"));
+      dispatch(setError("Vui lòng nhập mật khẩu"));
       return false;
     }
 
@@ -43,7 +43,7 @@ const LoginScreen = () => {
     <section className="card">
       <div className="card__row card__row--right">
         <div className="card__body">
-          <h1 className="card__title">Login</h1>
+          <h1 className="card__title">Đăng nhập</h1>
           <form className="form" onSubmit={handleLogin}>
             {!!msgError && <Alert type="error" description={msgError} />}
 
@@ -60,7 +60,7 @@ const LoginScreen = () => {
             </div>
 
             <div className="form__field">
-              <label htmlFor="password" className="form__label">Password</label>
+              <label htmlFor="password" className="form__label">Mật khẩu</label>
               <input
                 id="password"
                 name="password"
@@ -72,7 +72,7 @@ const LoginScreen = () => {
             </div>
 
             <button type="submit" className="btn btn-primary">
-              Login
+              Đăng nhập
             </button>
           </form>
         </div>
@@ -80,12 +80,12 @@ const LoginScreen = () => {
 
       <div className="card__row card__row--colored card__row--left">
         <div className="card__body">
-          <h2 className="card__subtitle">You're new?</h2>
+          <h2 className="card__subtitle">Bạn mới ở đây?</h2>
           <p className="card__description">
-            Register and discover a great amount of features
+            Đăng ký tài khoản để khám phá nhiều tính năng hấp dẫn
           </p>
           <Link to="/auth/register" className="btn btn-primary--outline">
-            Create account
+            Tạo tài khoản
           </Link>
         </div>
       </div>

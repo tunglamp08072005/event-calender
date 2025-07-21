@@ -4,15 +4,15 @@ const EventSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, "Title is required"],
+      required: [true, "Tiêu đề là bắt buộc"],
     },
     start: {
       type: Date,
-      required: [true, "Start date is required"],
+      required: [true, "Ngày bắt đầu là bắt buộc"],
     },
     end: {
       type: Date,
-      required: [true, "End date is required"],
+      required: [true, "Ngày kết thúc là bắt buộc"],
     },
     notes: {
       type: String,
@@ -21,7 +21,7 @@ const EventSchema = new mongoose.Schema(
     user: {
       type: mongoose.Types.ObjectId,
       ref: "User",
-      required: [true, "User is required"],
+      required: [true, "Người dùng là bắt buộc"],
     },
   },
   {

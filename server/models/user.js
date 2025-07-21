@@ -4,18 +4,18 @@ const UserSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Name is required"],
+      required: [true, "Tên là bắt buộc"],
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
+      required: [true, "Email là bắt buộc"],
       unique: true,
       lowercase: true,
       trim: true,
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
+      required: [true, "Mật khẩu là bắt buộc"],
     },
   },
   {

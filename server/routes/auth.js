@@ -19,19 +19,19 @@ router.post(
   [
     check("name")
       .notEmpty()
-      .withMessage("Name is required")
+      .withMessage("Tên là bắt buộc")
       .isLength({ max: 32 })
-      .withMessage("Name length must be max 32 characters"),
+      .withMessage("Tên không được vượt quá 32 ký tự"),
     check("email")
       .isEmail()
-      .withMessage("Invalid email"),
+      .withMessage("Email không hợp lệ"),
     check("password")
       .isStrongPassword()
       .withMessage(
-        "Password should be between 8-32 characters and should include 1 number, 1 symbol, 1 lowercase and 1 uppercase."
+        "Mật khẩu phải từ 8–32 ký tự và bao gồm ít nhất 1 chữ số, 1 ký tự đặc biệt, 1 chữ thường và 1 chữ in hoa."
       )
       .isLength({ max: 32 })
-      .withMessage("Password should be between 8-32 characters."),
+      .withMessage("Mật khẩu phải từ 8–32 ký tự."),
     validateFields,
     emailExists,
   ],
@@ -44,10 +44,10 @@ router.post(
   [
     check("email")
       .isEmail()
-      .withMessage("Invalid email"),
+      .withMessage("Email không hợp lệ"),
     check("password")
       .notEmpty()
-      .withMessage("Password is required."),
+      .withMessage("Mật khẩu là bắt buộc."),
     validateFields,
   ],
   loginUser

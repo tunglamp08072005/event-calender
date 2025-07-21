@@ -1,7 +1,7 @@
 const LoadingScreen = () => {
   return (
     <div className="loading-screen">
-      <span className="loading-text">Loading...</span>
+      <span className="loading-text">Đang tải...</span>
     </div>
   );
 };

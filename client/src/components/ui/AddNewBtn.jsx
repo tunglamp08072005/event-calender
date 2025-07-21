@@ -6,23 +6,15 @@ import PlusIcon from "./icons/PlusIcon";
 const AddNewBtn = () => {
   const dispatch = useDispatch();
 
-  const onNewButtonClick = () => {
+  const handleClickNew = () => {
     dispatch(eventClearActive());
     dispatch(uiOpenModal());
   };
 
   return (
-    <div className="btn-wrapper">
-      <button
-        type="button"
-        className="btn btn-primary btn--floating btn--floating-right"
-        onClick={onNewButtonClick}
-        aria-label="Add new event"
-      >
-        <PlusIcon />
-      </button>
-    </div>
+    <button className="btn btn-primary btn--floating btn--floating-right" onClick={handleClickNew}>
+      <PlusIcon />
+    </button>
   );
 };
-
 export default AddNewBtn;
