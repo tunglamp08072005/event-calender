@@ -1,21 +1,23 @@
+const createType = (prefix, action) => `[${prefix}] ${action}`;
+
 const types = {
-  authCheckingFinish: "[Auth] Finish checking",
-  authLogin: "[Auth] Login",
-  authLogout: "[Auth] Logout",
+  authCheckingFinish: createType("Auth", "Finish checking"),
+  authLogin: createType("Auth", "Login"),
+  authLogout: createType("Auth", "Logout"),
 
-  uiOpenModal: "[UI] Open modal",
-  uiCloseModal: "[UI] Close modal",
-  uiSetError: "[UI] Set error",
-  uiRemoveError: "[UI] Remove error",
+  uiOpenModal: createType("UI", "Open modal"),
+  uiCloseModal: createType("UI", "Close modal"),
+  uiSetError: createType("UI", "Set error"),
+  uiRemoveError: createType("UI", "Remove error"),
 
-  eventStartAddNew: "[Event] Start add new",
-  eventSetActive: "[Event] Set active",
-  eventClearActive: "[Event] Clear active",
-  eventClearLogout: "[Event] Clear logout",
-  eventAddNew: "[Event] Add new",
-  eventUpdate: "[Event] Update",
-  eventDelete: "[Event] Delete",
-  eventLoaded: "[Event] Events loaded"
+  eventStartAddNew: createType("Event", "Start add new"),
+  eventSetActive: createType("Event", "Set active"),
+  eventClearActive: createType("Event", "Clear active"),
+  eventClearLogout: createType("Event", "Clear logout"),
+  eventAddNew: createType("Event", "Add new"),
+  eventUpdate: createType("Event", "Update"),
+  eventDelete: createType("Event", "Delete"),
+  eventLoaded: createType("Event", "Events loaded"),
 };
 
 export default types;
