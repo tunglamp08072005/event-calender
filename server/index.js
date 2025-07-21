@@ -1,32 +1,32 @@
 const express = require("express");
-require("dotenv").config();
-const dbConnection = require("./database/config");
 const cors = require("cors");
 const path = require("path");
+require("dotenv").config();
 
-// Server
+// Database connection
+const dbConnection = require("./database/config");
+
+// Initialize app
 const app = express();
 
-// Database
+// Connect to DB
 dbConnection();
 
-// Cors
+// Middlewares
 app.use(cors());
+app.use(express.json()); // Parse JSON body
+app.use(express.static("public")); // Serve static files
 
-// Public path
-app.use(express.static("public"));
-
-// Read and parse body
-app.use(express.json());
-
-// Routes
+// API Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/events", require("./routes/events.js"));
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/public/index.html"));
+
+// SPA fallback route
+app.get("/*", (_, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Listening PORT
+// Start server
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`SERVER LISTENING ON PORT ${port}`);

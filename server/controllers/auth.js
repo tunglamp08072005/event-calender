@@ -1,86 +1,105 @@
-const bcryptjs = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const generateJWT = require("../helpers/jwt");
 
+// Đăng ký người dùng mới
 const createUser = async (req, res) => {
   const { email, password } = req.body;
-  try {
-    let user = await User.findOne({ email });
 
-    if (user) {
-      return res
-        .status(400)
-        .json({ ok: false, msg: "User email already exists" });
+  try {
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(400).json({
+        ok: false,
+        msg: "Email này đã được sử dụng",
+      });
     }
 
-    user = new User(req.body);
+    const newUser = new User(req.body);
 
-    // Encrypt password
-    const salt = bcryptjs.genSaltSync();
-    user.password = bcryptjs.hashSync(password, salt);
+    // Mã hóa mật khẩu
+    const salt = bcrypt.genSaltSync();
+    newUser.password = bcrypt.hashSync(password, salt);
 
-    await user.save();
+    await newUser.save();
 
-    const token = await generateJWT(user.id, user.name);
+    const token = await generateJWT(newUser.id, newUser.name);
 
     return res.status(201).json({
       ok: true,
-      user,
+      user: newUser,
       token,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.error("Error in createUser:", err);
     return res.status(500).json({
       ok: false,
-      msg: "Please, contact the administrator",
+      msg: "Đã xảy ra lỗi, vui lòng liên hệ quản trị viên",
     });
   }
 };
 
+// Đăng nhập người dùng
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const existingUser = await User.findOne({ email });
 
-    if (!user) {
+    if (!existingUser) {
       return res.status(400).json({
         ok: false,
-        msg: "User email does not exist",
+        msg: "Không tìm thấy người dùng với email này",
       });
     }
 
-    // Verify if passwords match
-    const validPassword = bcryptjs.compareSync(password, user.password);
-    if (!validPassword) {
+    const isMatch = bcrypt.compareSync(password, existingUser.password);
+    if (!isMatch) {
       return res.status(401).json({
         ok: false,
-        msg: "Invalid password.",
+        msg: "Mật khẩu không đúng",
       });
     }
 
-    const token = await generateJWT(user.id, user.name);
+    const token = await generateJWT(existingUser.id, existingUser.name);
 
     return res.status(200).json({
       ok: true,
-      user,
+      user: existingUser,
       token,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.error("Error in loginUser:", err);
     return res.status(500).json({
       ok: false,
-      msg: "Please, contact the administrator",
+      msg: "Lỗi máy chủ, vui lòng thử lại sau",
     });
   }
 };
 
+// Làm mới token
 const renewToken = async (req, res) => {
-  const { id, name } = req;
+  try {
+    const { id, name } = req;
+    const token = await generateJWT(id, name);
 
-  const token = await generateJWT(id, name);
-
-  res.json({ ok: true, user: { _id: id, name }, token });
+    return res.status(200).json({
+      ok: true,
+      user: { _id: id, name },
+      token,
+    });
+  } catch (err) {
+    console.error("Error in renewToken:", err);
+    return res.status(500).json({
+      ok: false,
+      msg: "Không thể làm mới token, vui lòng đăng nhập lại",
+    });
+  }
 };
 
-module.exports = { createUser, loginUser, renewToken };
+module.exports = {
+  createUser,
+  loginUser,
+  renewToken,
+};

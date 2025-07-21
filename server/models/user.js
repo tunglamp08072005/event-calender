@@ -1,25 +1,32 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
 
-const UserSchema = Schema({
-  name: {
-    type: String,
-    required: [true, "Name is required"],
+const UserSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Name is required"],
+    },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+    },
   },
-  email: {
-    type: String,
-    required: [true, "Email is required"],
-    lowercase: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: [true, "Password is required"],
-  },
-});
+  {
+    versionKey: false,
+    toJSON: {
+      transform: function (_, ret) {
+        delete ret.password;
+        return ret;
+      },
+    },
+  }
+);
 
-UserSchema.methods.toJSON = function () {
-  const { __v, password, ...user } = this.toObject();
-  return user;
-};
-
-module.exports = model("User", UserSchema);
+module.exports = mongoose.model("User", UserSchema);

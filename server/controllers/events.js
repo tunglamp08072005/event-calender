@@ -1,92 +1,99 @@
 const Event = require("../models/Event");
 
+// Lấy danh sách tất cả sự kiện, kèm tên người tạo
 const getEvents = async (req, res) => {
   try {
-    const events = await Event.find().populate("user", "name");
+    const allEvents = await Event.find().populate("user", "name");
 
-    return res.json({
+    return res.status(200).json({
       ok: true,
-      events,
+      events: allEvents,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.error("Lỗi khi lấy danh sách sự kiện:", err);
     return res.status(500).json({
       ok: false,
-      msg: "Please, contact the administrator",
+      msg: "Đã xảy ra lỗi. Vui lòng thử lại hoặc liên hệ admin.",
     });
   }
 };
 
+// Tạo một sự kiện mới
 const createEvent = async (req, res) => {
-  const { title, start, end, notes } = req.body;
-
-  const event = new Event({
-    title,
-    start,
-    end,
-    notes,
-    user: req.id,
-  });
-
   try {
-    await event.save();
+    const { title, start, end, notes } = req.body;
+
+    const newEvent = new Event({
+      title,
+      start,
+      end,
+      notes,
+      user: req.id,
+    });
+
+    await newEvent.save();
 
     return res.status(201).json({
       ok: true,
-      event,
+      event: newEvent,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.error("Lỗi khi tạo sự kiện:", err);
     return res.status(500).json({
       ok: false,
-      msg: "Please, contact the administrator",
+      msg: "Không thể tạo sự kiện. Vui lòng liên hệ quản trị viên.",
     });
   }
 };
 
+// Cập nhật sự kiện theo ID
 const updateEvent = async (req, res) => {
-  const { id } = req.params;
-  const { title, start, end, notes } = req.body;
-
   try {
-    const event = await Event.findByIdAndUpdate(
-      id,
-      {
-        title,
-        start,
-        end,
-        notes,
-      },
+    const eventId = req.params.id;
+    const { title, start, end, notes } = req.body;
+
+    const updatedEvent = await Event.findByIdAndUpdate(
+      eventId,
+      { title, start, end, notes },
       { new: true }
     );
 
-    return res.json({ ok: true, event });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      ok: false,
-      msg: "Please, contact the administrator",
-    });
-  }
-};
-
-const deleteEvent = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const event = await Event.findByIdAndDelete(id);
-
-    return res.json({
+    return res.status(200).json({
       ok: true,
-      event,
+      event: updatedEvent,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.error("Lỗi khi cập nhật sự kiện:", err);
     return res.status(500).json({
       ok: false,
-      msg: "Please, contact the administrator",
+      msg: "Không thể cập nhật. Vui lòng thử lại sau.",
     });
   }
 };
 
-module.exports = { getEvents, createEvent, updateEvent, deleteEvent };
+// Xóa sự kiện theo ID
+const deleteEvent = async (req, res) => {
+  try {
+    const eventId = req.params.id;
+
+    const deletedEvent = await Event.findByIdAndDelete(eventId);
+
+    return res.status(200).json({
+      ok: true,
+      event: deletedEvent,
+    });
+  } catch (err) {
+    console.error("Lỗi khi xóa sự kiện:", err);
+    return res.status(500).json({
+      ok: false,
+      msg: "Không thể xóa sự kiện. Vui lòng liên hệ admin.",
+    });
+  }
+};
+
+module.exports = {
+  getEvents,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+};
