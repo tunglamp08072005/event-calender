@@ -9,25 +9,32 @@ import { removeError, setError } from "../../actions/ui";
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const { msgError } = useSelector((state) => state.ui);
+
   const [formValues, handleInputChange] = useForm({
     email: "",
     password: "",
   });
+
   const { email, password } = formValues;
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (isFormValid()) dispatch(startLogin(email, password));
+  const handleLogin = (event) => {
+    event.preventDefault();
+    if (isFormValid()) {
+      dispatch(startLogin(email, password));
+    }
   };
 
   const isFormValid = () => {
     if (!validator.isEmail(email)) {
       dispatch(setError("Email is not valid"));
       return false;
-    } else if (password.trim().length === 0) {
+    }
+
+    if (!password.trim()) {
       dispatch(setError("Password is required"));
       return false;
     }
+
     dispatch(removeError());
     return true;
   };
@@ -38,46 +45,46 @@ const LoginScreen = () => {
         <div className="card__body">
           <h1 className="card__title">Login</h1>
           <form className="form" onSubmit={handleLogin}>
-            {msgError && <Alert type="error" description={msgError} />}
+            {!!msgError && <Alert type="error" description={msgError} />}
+
             <div className="form__field">
-              <label htmlFor="email" className="form__label">
-                Email
-              </label>
+              <label htmlFor="email" className="form__label">Email</label>
               <input
-                className="form__input"
-                type="email"
-                name="email"
                 id="email"
+                name="email"
+                type="email"
+                className="form__input"
                 value={email}
                 onChange={handleInputChange}
               />
             </div>
+
             <div className="form__field">
-              <label htmlFor="password" className="form__label">
-                Password
-              </label>
+              <label htmlFor="password" className="form__label">Password</label>
               <input
-                className="form__input"
-                type="password"
-                name="password"
                 id="password"
+                name="password"
+                type="password"
+                className="form__input"
                 value={password}
                 onChange={handleInputChange}
               />
             </div>
-            <button className="btn btn-primary" type="submit">
+
+            <button type="submit" className="btn btn-primary">
               Login
             </button>
           </form>
         </div>
       </div>
+
       <div className="card__row card__row--colored card__row--left">
         <div className="card__body">
           <h2 className="card__subtitle">You're new?</h2>
           <p className="card__description">
             Register and discover a great amount of features
           </p>
-          <Link className="btn btn-primary--outline" to={"/auth/register"}>
+          <Link to="/auth/register" className="btn btn-primary--outline">
             Create account
           </Link>
         </div>
@@ -85,4 +92,5 @@ const LoginScreen = () => {
     </section>
   );
 };
+
 export default LoginScreen;
