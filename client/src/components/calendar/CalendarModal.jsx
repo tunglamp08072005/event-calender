@@ -2,8 +2,13 @@ import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import DateTimePicker from "react-datetime-picker";
 import moment from "moment";
-import { removeError, setError, uiCloseModal } from "../../actions/ui";
 import { useDispatch, useSelector } from "react-redux";
+
+import {
+  removeError,
+  setError,
+  uiCloseModal,
+} from "../../actions/ui";
 import {
   eventClearActive,
   eventStartAddNew,
@@ -13,92 +18,91 @@ import Alert from "../ui/Alert";
 
 Modal.setAppElement("#root");
 
-const nowInitial = moment().minutes(0).seconds(0).add(1, "hour");
-const nowEnd = nowInitial.clone().add(1, "hour");
+const initialStart = moment().startOf("hour").add(1, "hour");
+const initialEnd = initialStart.clone().add(1, "hour");
 
-const initEvent = {
+const defaultEvent = {
   title: "",
   notes: "",
-  start: nowInitial.toDate(),
-  end: nowEnd.toDate(),
+  start: initialStart.toDate(),
+  end: initialEnd.toDate(),
 };
 
 const CalendarModal = () => {
   const dispatch = useDispatch();
+  const { modalOpen, msgError } = useSelector((state) => state.ui);
+  const { activeEvent } = useSelector((state) => state.calendar);
 
-  const { ui, calendar } = useSelector((state) => state);
-  const { modalOpen, msgError } = ui;
-  const { activeEvent } = calendar;
-
-  const [formValues, setFormValues] = useState(initEvent);
-  const { notes, title, start, end } = formValues;
+  const [formValues, setFormValues] = useState(defaultEvent);
+  const { title, notes, start, end } = formValues;
 
   useEffect(() => {
-    if (activeEvent) {
-      setFormValues(activeEvent);
-    } else {
-      setFormValues(initEvent);
-    }
+    setFormValues(activeEvent ? activeEvent : defaultEvent);
   }, [activeEvent]);
 
   const handleInputChange = ({ target }) => {
-    setFormValues({
-      ...formValues,
-      [target.name]: target.value,
-    });
+    const { name, value } = target;
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const closeModal = () => {
+  const handleStartChange = (value) => {
+    setFormValues((prev) => ({
+      ...prev,
+      start: value,
+    }));
+  };
+
+  const handleEndChange = (value) => {
+    setFormValues((prev) => ({
+      ...prev,
+      end: value,
+    }));
+  };
+
+  const handleCloseModal = () => {
     if (modalOpen) {
       dispatch(eventClearActive());
       dispatch(uiCloseModal());
     }
   };
 
-  const handleStartDateChange = (e) => {
-    setFormValues({
-      ...formValues,
-      start: e,
-    });
-  };
-
-  const handleEndDateChange = (e) => {
-    setFormValues({
-      ...formValues,
-      end: e,
-    });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!isFormValid()) return;
 
-    if (activeEvent && activeEvent.id) {
-      // Update
+    if (activeEvent?.id) {
       dispatch(eventStartUpdate(formValues));
     } else {
-      // Create new
       dispatch(eventStartAddNew(formValues));
     }
 
-    closeModal();
+    handleCloseModal();
   };
 
   const isFormValid = () => {
-    if (title.trim().length === 0) {
+    if (!title.trim()) {
       dispatch(setError("Title is required"));
       return false;
-    } else if (title.trim().length > 32) {
+    }
+
+    if (title.length > 32) {
       dispatch(setError("Title length must be max 32 characters"));
       return false;
-    } else if (moment(start).isSameOrAfter(moment(end))) {
+    }
+
+    if (!moment(start).isBefore(moment(end))) {
       dispatch(setError("End date must be after start date"));
       return false;
-    } else if (notes && notes.trim().length > 128) {
+    }
+
+    if (notes?.trim().length > 128) {
       dispatch(setError("Notes length must be max 128 characters"));
       return false;
     }
+
     dispatch(removeError());
     return true;
   };
@@ -106,70 +110,68 @@ const CalendarModal = () => {
   return (
     <Modal
       isOpen={modalOpen}
-      onRequestClose={closeModal}
+      onRequestClose={handleCloseModal}
       closeTimeoutMS={200}
       contentLabel="Event modal"
       className="modal"
       overlayClassName="modal__background"
     >
-      <h1 className="modal__title">
-        {activeEvent ? "Edit event" : "New event"}
-      </h1>
+      <h1 className="modal__title">{activeEvent ? "Edit event" : "New event"}</h1>
       <hr />
       <form className="form" onSubmit={handleSubmit}>
         {msgError && <Alert type="error" description={msgError} />}
+
         <div className="form__field">
           <label className="form__label">Start date</label>
           <DateTimePicker
-            onChange={handleStartDateChange}
-            value={start}
             className="form__input"
+            onChange={handleStartChange}
+            value={start}
           />
         </div>
+
         <div className="form__field">
           <label className="form__label">End date</label>
           <DateTimePicker
-            onChange={handleEndDateChange}
+            className="form__input"
+            onChange={handleEndChange}
             value={end}
             minDate={start}
-            className="form__input"
           />
         </div>
+
         <hr />
+
         <div className="form__field">
-          <label htmlFor="title" className="form__label">
-            Event title
-          </label>
+          <label htmlFor="title" className="form__label">Event title</label>
           <input
-            autoComplete="off"
-            type="text"
-            className="form__input"
             id="title"
             name="title"
+            type="text"
             placeholder="New event"
+            autoComplete="off"
+            className="form__input"
             value={title}
             onChange={handleInputChange}
           />
         </div>
+
         <div className="form__field">
-          <label htmlFor="notes" className="form__label">
-            Notes
-          </label>
+          <label htmlFor="notes" className="form__label">Notes</label>
           <textarea
-            type="text"
-            className="form__text-area"
-            rows="5"
             id="notes"
             name="notes"
+            rows="5"
+            className="form__text-area"
             value={notes}
             onChange={handleInputChange}
-          ></textarea>
+          />
         </div>
-        <button className="btn btn-primary btn--block" type="submit">
-          Save
-        </button>
+
+        <button type="submit" className="btn btn-primary btn--block">Save</button>
       </form>
     </Modal>
   );
 };
+
 export default CalendarModal;
