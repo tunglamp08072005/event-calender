@@ -1,30 +1,27 @@
 import types from "../types";
 
-const initialState = {
+const initialState = Object.freeze({
   checking: true,
-};
+});
 
 const authReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case types.authLogin:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case types.authCheckingFinish:
-      return {
-        ...state,
-        checking: false,
-      };
+  if (!action?.type) return state;
 
-    case types.authLogout:
-      return {
-        checking: false,
-      };
+  const reducers = {
+    [types.authLogin]: () => ({
+      ...state,
+      ...action.payload,
+    }),
+    [types.authCheckingFinish]: () => ({
+      ...state,
+      checking: false,
+    }),
+    [types.authLogout]: () => ({
+      checking: false,
+    }),
+  };
 
-    default:
-      return state;
-  }
+  return (reducers[action.type] || (() => state))();
 };
 
 export default authReducer;
