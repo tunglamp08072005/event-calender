@@ -6,98 +6,83 @@ import { eventLogout } from "./event";
 
 export const startLogin = (email, password) => {
   return async (dispatch) => {
-    fetchNoToken("auth/login", { email, password }, "POST")
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.ok) {
-          const { user, token } = data;
-          const { _id: id, name } = user;
+    try {
+      const resp = await fetchNoToken("auth/login", { email, password }, "POST");
+      const data = await resp.json();
 
-          localStorage.setItem("token", token);
-          localStorage.setItem("token-init-date", new Date().getTime());
+      if (data.ok) {
+        const { user, token } = data;
+        const { _id: id, name } = user;
 
-          dispatch(
-            login({
-              id,
-              name,
-            })
-          );
-        } else {
-          if (data.errors) dispatch(checkingErrors(data.errors));
-          if (data.msg) Swal.fire("Error", data.msg, "error");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        Swal.fire("Error", "Please, contact the administrator", "error");
-      });
+        localStorage.setItem("token", token);
+        localStorage.setItem("token-init-date", new Date().getTime());
+
+        dispatch(login({ id, name }));
+      } else {
+        if (data.errors) dispatch(checkingErrors(data.errors));
+        if (data.msg) Swal.fire("Error", data.msg, "error");
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire("Error", "Please, contact the administrator", "error");
+    }
   };
 };
 
 export const startRegister = (name, email, password) => {
   return async (dispatch) => {
-    fetchNoToken("auth/register", { name, email, password }, "POST")
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.ok) {
-          const { user, token } = data;
-          const { _id: id, name } = user;
+    try {
+      const resp = await fetchNoToken("auth/register", { name, email, password }, "POST");
+      const data = await resp.json();
 
-          localStorage.setItem("token", token);
-          localStorage.setItem("token-init-date", new Date().getTime());
+      if (data.ok) {
+        const { user, token } = data;
+        const { _id: id, name } = user;
 
-          dispatch(
-            login({
-              id,
-              name,
-            })
-          );
-        } else {
-          if (data.errors) dispatch(checkingErrors(data.errors));
-          if (data.msg) Swal.fire("Error", data.msg, "error");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        Swal.fire("Error", "Please, contact the administrator", "error");
-      });
+        localStorage.setItem("token", token);
+        localStorage.setItem("token-init-date", new Date().getTime());
+
+        dispatch(login({ id, name }));
+      } else {
+        if (data.errors) dispatch(checkingErrors(data.errors));
+        if (data.msg) Swal.fire("Error", data.msg, "error");
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire("Error", "Please, contact the administrator", "error");
+    }
   };
 };
 
 export const checkingErrors = (errors) => {
   return (dispatch) => {
-    const { msg } = errors[Object.keys(errors)[0]];
+    const firstKey = Object.keys(errors)[0];
+    const { msg } = errors[firstKey];
     dispatch(setError(msg));
   };
 };
 
 export const startChecking = () => {
   return async (dispatch) => {
-    fetchWithToken("auth/renew")
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.ok) {
-          const { user, token } = data;
-          const { _id: id, name } = user;
+    try {
+      const resp = await fetchWithToken("auth/renew");
+      const data = await resp.json();
 
-          localStorage.setItem("token", token);
-          localStorage.setItem("token-init-date", new Date().getTime());
+      if (data.ok) {
+        const { user, token } = data;
+        const { _id: id, name } = user;
 
-          dispatch(
-            login({
-              id,
-              name,
-            })
-          );
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        Swal.fire("Error", "Please, contact the administrator", "error");
-      })
-      .finally(() => {
-        dispatch(checkingFinish());
-      });
+        localStorage.setItem("token", token);
+        localStorage.setItem("token-init-date", new Date().getTime());
+
+        dispatch(login({ id, name }));
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire("Error", "Please, contact the administrator", "error");
+    } finally {
+      dispatch(checkingFinish());
+    }
   };
 };
 
