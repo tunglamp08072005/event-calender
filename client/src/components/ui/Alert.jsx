@@ -1,13 +1,18 @@
 import PropTypes from "prop-types";
-const Alert = ({ type, description }) => {
+
+const Alert = (props) => {
+  const { type = "info", description = "" } = props;
+
   return (
-    <div className={`alert alert__${type}`}>
-      <p className="alert__title">{description}</p>
-    </div>
+    <section className={`alert alert__${type}`}>
+      <span className="alert__title">{description}</span>
+    </section>
   );
 };
+
 Alert.propTypes = {
   type: PropTypes.string,
   description: PropTypes.string,
 };
+
 export default Alert;
