@@ -1,77 +1,63 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 
 import Navbar from "../ui/Navbar";
 import CalendarEvent from "./CalendarEvent";
+import CalendarModal from "./CalendarModal";
+import AddNewBtn from "../ui/AddNewBtn";
+import DeleteBtn from "../ui/DeleteBtn";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./calendar.css";
-import CalendarModal from "./CalendarModal";
-import { useDispatch, useSelector } from "react-redux";
-import { uiOpenModal } from "../../actions/ui";
+
 import {
+  uiOpenModal,
   eventClearActive,
   eventSetActive,
   eventStartLoading,
-} from "../../actions/event";
-import AddNewBtn from "../ui/AddNewBtn";
-import DeleteBtn from "../ui/DeleteBtn";
+} from "../../actions";
 
 const localizer = momentLocalizer(moment);
 
 const CalendarScreen = () => {
   const dispatch = useDispatch();
-  const { calendar, auth, ui } = useSelector((state) => state);
-  const { events, activeEvent } = calendar;
-  const { id } = auth;
-  const { modalOpen } = ui;
-  const [lastView, setLastView] = useState(
-    localStorage.getItem("lastView") || "month"
-  );
+
+  const { calendar: { events, activeEvent }, auth: { id }, ui: { modalOpen } } = useSelector((state) => state);
+
+  const [lastView, setLastView] = useState(() => localStorage.getItem("lastView") || "month");
 
   useEffect(() => {
     dispatch(eventStartLoading());
   }, [dispatch]);
 
-  const onDoubleClick = (e) => {
-    dispatch(uiOpenModal());
+  const handleDoubleClick = () => dispatch(uiOpenModal());
+
+  const handleSelectEvent = (e) => dispatch(eventSetActive(e));
+
+  const handleViewChange = (view) => {
+    setLastView(view);
+    localStorage.setItem("lastView", view);
   };
 
-  const onSelect = (e) => {
-    dispatch(eventSetActive(e));
-  };
+  const handleSelectSlot = ({ start, end, action }) => {
+    if (activeEvent) dispatch(eventClearActive());
 
-  const onViewChange = (e) => {
-    setLastView(e);
-    localStorage.setItem("lastView", e);
-  };
-
-  const onSelectSlot = (e) => {
-    activeEvent && dispatch(eventClearActive());
-    if (e.action === "select" || e.action === "doubleClick") {
-      dispatch(
-        eventSetActive({
-          title: "",
-          notes: "",
-          start: e.start,
-          end: e.end,
-        })
-      );
+    if (action === "select" || action === "doubleClick") {
+      dispatch(eventSetActive({ title: "", notes: "", start, end }));
       dispatch(uiOpenModal());
     }
   };
 
-  const eventStyleGetter = (event, start, end, isSelected) => {
-    const style = {
+  const eventStyleGetter = (event) => ({
+    style: {
       backgroundColor: id === event.user._id ? "#367CF7" : "#465660",
       opacity: 0.8,
       display: "block",
       color: "white",
-    };
-
-    return { style };
-  };
+    },
+  });
 
   return (
     <div className="calendar">
@@ -82,20 +68,22 @@ const CalendarScreen = () => {
           events={events}
           startAccessor="start"
           endAccessor="end"
-          eventPropGetter={eventStyleGetter}
-          onDoubleClickEvent={onDoubleClick}
-          onSelectEvent={onSelect}
-          onView={onViewChange}
-          onSelectSlot={onSelectSlot}
-          selectable={true}
+          selectable
           view={lastView}
           components={{ event: CalendarEvent }}
+          eventPropGetter={eventStyleGetter}
+          onDoubleClickEvent={handleDoubleClick}
+          onSelectEvent={handleSelectEvent}
+          onView={handleViewChange}
+          onSelectSlot={handleSelectSlot}
         />
       </div>
+
       {activeEvent && !modalOpen && <DeleteBtn />}
       <AddNewBtn />
       <CalendarModal />
     </div>
   );
 };
+
 export default CalendarScreen;
