@@ -10,16 +10,16 @@ import LoadingScreen from "../components/ui/LoadingScreen";
 
 const AppRouter = () => {
   const dispatch = useDispatch();
-  const { checking, id } = useSelector((state) => state.auth);
+  const authState = useSelector(state => state.auth);
+  const { checking, id } = authState;
 
   useEffect(() => {
     dispatch(startChecking());
-  }, [dispatch]);
+  }, []);
 
+  if (checking) return <LoadingScreen />;
 
-  if (checking){
-    return <LoadingScreen />
-  }
+  const isAuthenticated = Boolean(id);
 
   return (
     <Router>
@@ -27,7 +27,7 @@ const AppRouter = () => {
         <Route
           path="/*"
           element={
-            <PublicRoute isAuth={!!id}>
+            <PublicRoute isAuth={isAuthenticated}>
               <AuthRouter />
             </PublicRoute>
           }
@@ -35,7 +35,7 @@ const AppRouter = () => {
         <Route
           path="/"
           element={
-            <PrivateRoute isAuth={!!id}>
+            <PrivateRoute isAuth={isAuthenticated}>
               <CalendarScreen />
             </PrivateRoute>
           }
@@ -44,4 +44,5 @@ const AppRouter = () => {
     </Router>
   );
 };
+
 export default AppRouter;
