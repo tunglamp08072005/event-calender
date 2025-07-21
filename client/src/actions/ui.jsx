@@ -1,18 +1,30 @@
 import types from "../types";
 
-export const setError = (err) => ({
-  type: types.uiSetError,
-  payload: err,
-});
+// Action creator để set lỗi
+export const setError = (err) => {
+  return {
+    type: types.uiSetError,
+    payload: err,
+  };
+};
 
-export const removeError = () => ({
-  type: types.uiRemoveError,
-});
+// Action creator để xóa lỗi
+export const removeError = () => {
+  return {
+    type: types.uiRemoveError,
+  };
+};
 
-export const uiOpenModal = () => ({
-  type: types.uiOpenModal,
-});
+// Action creator để mở modal
+export const uiOpenModal = () => {
+  return {
+    type: types.uiOpenModal,
+  };
+};
 
-export const uiCloseModal = () => ({
-  type: types.uiCloseModal,
-});
+// Action creator để đóng modal
+export const uiCloseModal = () => {
+  return {
+    type: types.uiCloseModal,
+  };
+};
