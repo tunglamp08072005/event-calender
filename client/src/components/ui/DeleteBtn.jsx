@@ -6,22 +6,24 @@ import DeleteIcon from "./icons/DeleteIcon";
 const DeleteBtn = () => {
   const dispatch = useDispatch();
 
-  const handleClickDelete = () => {
-    Swal.fire({
+  const confirmDeletion = async () => {
+    const result = await Swal.fire({
       title: "Delete event",
       text: "Do you want to delete the selected event?",
       icon: "warning",
       confirmButtonText: "Yes, delete!",
       showCancelButton: true,
-    }).then(({ isConfirmed }) => {
-      if (isConfirmed) dispatch(eventStartDelete());
     });
+
+    if (result.isConfirmed) {
+      dispatch(eventStartDelete());
+    }
   };
 
   return (
     <button
       className="btn btn-primary btn--floating btn--floating-left"
-      onClick={handleClickDelete}
+      onClick={confirmDeletion}
     >
       <DeleteIcon />
     </button>
