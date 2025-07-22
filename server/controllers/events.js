@@ -3,11 +3,12 @@ const Event = require("../models/Event");
 // Lấy danh sách tất cả sự kiện, kèm tên người tạo
 const getEvents = async (req, res) => {
   try {
-    const allEvents = await Event.find().populate("user", "name");
+    const userId = req.id;
+    const userEvents = await Event.find({ user: userId }).populate("user", "name");
 
     return res.status(200).json({
       ok: true,
-      events: allEvents,
+      events: userEvents,
     });
   } catch (err) {
     console.error("Lỗi khi lấy danh sách sự kiện:", err);
@@ -50,6 +51,24 @@ const createEvent = async (req, res) => {
 const updateEvent = async (req, res) => {
   try {
     const eventId = req.params.id;
+    const userId = req.id;
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({
+        ok: false,
+        msg: "Sự kiện không tồn tại",
+      });
+    }
+
+    if (event.user.toString() !== userId) {
+      return res.status(401).json({
+        ok: false,
+        msg: "Bạn không có quyền cập nhật sự kiện này",
+      });
+    }
+
     const { title, start, end, notes } = req.body;
 
     const updatedEvent = await Event.findByIdAndUpdate(
@@ -75,12 +94,29 @@ const updateEvent = async (req, res) => {
 const deleteEvent = async (req, res) => {
   try {
     const eventId = req.params.id;
+    const userId = req.id;
 
-    const deletedEvent = await Event.findByIdAndDelete(eventId);
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({
+        ok: false,
+        msg: "Sự kiện không tồn tại",
+      });
+    }
+
+    if (event.user.toString() !== userId) {
+      return res.status(401).json({
+        ok: false,
+        msg: "Bạn không có quyền thực hiện hành động này",
+      });
+    }
+
+    await event.deleteOne();
 
     return res.status(200).json({
       ok: true,
-      event: deletedEvent,
+      event,
     });
   } catch (err) {
     console.error("Lỗi khi xóa sự kiện:", err);

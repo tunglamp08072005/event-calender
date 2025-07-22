@@ -138,17 +138,17 @@ const CalendarScreen = () => {
       </div>
 
       {activeEvent && !modalOpen && (
-        <>
+        <div className="btn--floating-bottom-left-wrapper">
           <button
-            className="btn btn-primary btn--floating btn--floating-left"
-            style={{ bottom: "5rem" }}
+            className="btn btn-primary"
             onClick={() => dispatch(uiOpenModal())}
             title="Chỉnh sửa sự kiện"
           >
             ✏️
           </button>
+          {/* ⚠️ Bọc DeleteBtn bằng Fragment để không bị lệch bố cục */}
           <DeleteBtn />
-        </>
+        </div>
       )}
 
       <AddNewBtn />

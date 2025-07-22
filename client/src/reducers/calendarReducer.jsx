@@ -44,10 +44,12 @@ const calendarReducer = (state = initialState, action) => {
       activeEvent: null,
     }),
 
-    [types.eventClearLogout]: () => ({
-      events: [],
-      activeEvent: null,
-    }),
+    [types.eventClearLogout]: () => {
+      return {
+        events: [],
+        activeEvent: null,
+      };
+    },
   };
 
   return (handlers[action.type] || (() => state))();

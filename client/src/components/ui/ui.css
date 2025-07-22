@@ -121,3 +121,14 @@
   background-color: var(--color-danger-background);
   border-color: var(--color-danger-border);
 }
+
+.btn-danger {
+  background-color: #e74c3c;
+  border-color: #e74c3c;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+  border-color: #c0392b;
+}

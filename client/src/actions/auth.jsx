@@ -3,6 +3,7 @@ import types from "../types";
 import Swal from "sweetalert2";
 import { removeError, setError } from "./ui";
 import { eventLogout } from "./event";
+import { eventStartLoading } from "./event";
 
 export const startLogin = (email, password) => {
   return async (dispatch) => {
@@ -18,6 +19,7 @@ export const startLogin = (email, password) => {
         localStorage.setItem("token-init-date", new Date().getTime());
 
         dispatch(login({ id, name }));
+        dispatch(eventStartLoading());
       } else {
         if (data.errors) dispatch(checkingErrors(data.errors));
         if (data.msg) Swal.fire("Lỗi", convertMessageToVietnamese(data.msg), "error");
@@ -43,6 +45,7 @@ export const startRegister = (name, email, password) => {
         localStorage.setItem("token-init-date", new Date().getTime());
 
         dispatch(login({ id, name }));
+        dispatch(eventStartLoading());
       } else {
         if (data.errors) dispatch(checkingErrors(data.errors));
         if (data.msg) Swal.fire("Lỗi", convertMessageToVietnamese(data.msg), "error");

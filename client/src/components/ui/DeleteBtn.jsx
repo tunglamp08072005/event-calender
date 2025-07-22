@@ -21,8 +21,9 @@ const DeleteBtn = () => {
 
   return (
     <button
-      className="btn btn-primary btn--floating btn--floating-left"
+      className="btn btn-danger"
       onClick={handleClickDelete}
+      title="Xoá sự kiện"
     >
       <DeleteIcon />
     </button>
