@@ -30,7 +30,8 @@
 ---
 
 ## 🔗 Hình ảnh của ứng dụng
-<img width="2879" height="1619" alt="image" src="https://github.com/user-attachments/assets/39dc7fce-410e-463b-be54-47b0d8f1eac5" />
+<img width="2879" height="1619" alt="image" src="https://github.com/user-attachments/assets/32cc3608-8366-48da-ad3d-b1f945d644f0" />
+
 
 ---
 
