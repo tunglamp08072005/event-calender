@@ -19,6 +19,7 @@ export const startLogin = (email, password) => {
         localStorage.setItem("token-init-date", new Date().getTime());
 
         dispatch(login({ id, name }));
+        dispatch(eventLogout());    
         dispatch(eventStartLoading());
       } else {
         if (data.errors) dispatch(checkingErrors(data.errors));
@@ -45,6 +46,7 @@ export const startRegister = (name, email, password) => {
         localStorage.setItem("token-init-date", new Date().getTime());
 
         dispatch(login({ id, name }));
+        dispatch(eventLogout());    
         dispatch(eventStartLoading());
       } else {
         if (data.errors) dispatch(checkingErrors(data.errors));

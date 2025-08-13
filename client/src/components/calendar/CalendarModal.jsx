@@ -10,6 +10,7 @@ import {
   eventStartUpdate,
 } from "../../actions/event";
 import Alert from "../ui/Alert";
+moment.locale("vi");
 
 Modal.setAppElement("#root");
 
@@ -119,6 +120,7 @@ const CalendarModal = () => {
         <div className="form__field">
           <label className="form__label">Thời gian bắt đầu</label>
           <DateTimePicker
+            locale="vi"
             onChange={handleStartDateChange}
             value={start}
             className="form__input"
@@ -127,6 +129,7 @@ const CalendarModal = () => {
         <div className="form__field">
           <label className="form__label">Thời gian kết thúc</label>
           <DateTimePicker
+            locale="vi"
             onChange={handleEndDateChange}
             value={end}
             minDate={start}
