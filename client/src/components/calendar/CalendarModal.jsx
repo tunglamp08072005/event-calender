@@ -120,20 +120,24 @@ const CalendarModal = () => {
         <div className="form__field">
           <label className="form__label">Thời gian bắt đầu</label>
           <DateTimePicker
-            locale="vi"
+            locale="en-US"
             onChange={handleStartDateChange}
             value={start}
             className="form__input"
+            format="MM/dd/yyyy h:mm a"  // định dạng 12h với AM/PM
+            amPmAriaLabel="Chọn AM/PM"
           />
         </div>
         <div className="form__field">
           <label className="form__label">Thời gian kết thúc</label>
           <DateTimePicker
-            locale="vi"
+            locale="en-US"
             onChange={handleEndDateChange}
             value={end}
             minDate={start}
             className="form__input"
+            format="MM/dd/yyyy h:mm a"  // định dạng 12h với AM/PM
+            amPmAriaLabel="Chọn AM/PM"
           />
         </div>
         <hr />
