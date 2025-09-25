@@ -26,60 +26,60 @@ export const eventStartAddNew = (event) => {
   return async (dispatch, getState) => {
     const { id: _id, name } = getState().auth;
 
-    fetchWithToken("events", event, "POST")
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.ok) {
-          event.id = data.event._id;
-          event.user = {
-            _id,
-            name,
-          };
-          dispatch(eventAddNew(event));
-          Swal.fire(
-            "Đã lưu",
-            `Sự kiện '${event.title}' đã được lưu thành công.`,
-            "success"
-          );
-        } else {
-          const msgError =
-            data.msg ||
-            data.errors[Object.keys(data.errors)[0]].msg ||
-            "Vui lòng liên hệ quản trị viên";
-          Swal.fire("Lỗi", msgError, "error");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        Swal.fire("Lỗi", "Vui lòng liên hệ quản trị viên", "error");
-      });
+    try {
+      const resp = await fetchWithToken("events", event, "POST");
+      const data = await resp.json();
+
+      if (data.ok) {
+        // Optimistic update: update local state trước khi Swal
+        event.id = data.event._id;
+        event.user = { _id, name };
+        dispatch(eventAddNew(event));
+
+        // Thông báo thành công
+        Swal.fire(
+          "Đã lưu",
+          `Sự kiện '${event.title}' đã được lưu thành công.`,
+          "success"
+        );
+      } else {
+        const msgError =
+          data.msg ||
+          data.errors[Object.keys(data.errors)[0]]?.msg ||
+          "Vui lòng liên hệ quản trị viên";
+        Swal.fire("Lỗi", msgError, "error");
+      }
+    } catch (err) {
+      console.log(err);
+      Swal.fire("Lỗi", "Vui lòng liên hệ quản trị viên", "error");
+    }
   };
 };
 
 export const eventStartUpdate = (event) => {
   return async (dispatch) => {
-    fetchWithToken(`events/${event.id}`, event, "PUT")
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.ok) {
-          dispatch(eventUpdate(event));
-          Swal.fire(
-            "Đã cập nhật",
-            `Sự kiện '${event.title}' đã được cập nhật thành công.`,
-            "success"
-          );
-        } else {
-          const msgError =
-            data.msg ||
-            data.errors[Object.keys(data.errors)[0]].msg ||
-            "Vui lòng liên hệ quản trị viên";
-          Swal.fire("Lỗi", msgError, "error");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        Swal.fire("Lỗi", "Vui lòng liên hệ quản trị viên", "error");
-      });
+    try {
+      const resp = await fetchWithToken(`events/${event.id}`, event, "PUT");
+      const data = await resp.json();
+
+      if (data.ok) {
+        dispatch(eventUpdate(event));
+        Swal.fire(
+          "Đã cập nhật",
+          `Sự kiện '${event.title}' đã được cập nhật thành công.`,
+          "success"
+        );
+      } else {
+        const msgError =
+          data.msg ||
+          data.errors[Object.keys(data.errors)[0]]?.msg ||
+          "Vui lòng liên hệ quản trị viên";
+        Swal.fire("Lỗi", msgError, "error");
+      }
+    } catch (err) {
+      console.log(err);
+      Swal.fire("Lỗi", "Vui lòng liên hệ quản trị viên", "error");
+    }
   };
 };
 
@@ -87,28 +87,28 @@ export const eventStartDelete = () => {
   return async (dispatch, getState) => {
     const { id } = getState().calendar.activeEvent;
 
-    fetchWithToken(`events/${id}`, {}, "DELETE")
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data.ok) {
-          dispatch(eventDelete(id));
-          Swal.fire(
-            "Đã xoá",
-            "Sự kiện đã được xoá thành công.",
-            "success"
-          );
-        } else {
-          const msgError =
-            data.msg ||
-            data.errors[Object.keys(data.errors)[0]].msg ||
-            "Vui lòng liên hệ quản trị viên";
-          Swal.fire("Lỗi", msgError, "error");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        Swal.fire("Lỗi", "Vui lòng liên hệ quản trị viên", "error");
-      });
+    try {
+      const resp = await fetchWithToken(`events/${id}`, {}, "DELETE");
+      const data = await resp.json();
+
+      if (data.ok) {
+        dispatch(eventDelete(id));
+        Swal.fire(
+          "Đã xoá",
+          "Sự kiện đã được xoá thành công.",
+          "success"
+        );
+      } else {
+        const msgError =
+          data.msg ||
+          data.errors[Object.keys(data.errors)[0]]?.msg ||
+          "Vui lòng liên hệ quản trị viên";
+        Swal.fire("Lỗi", msgError, "error");
+      }
+    } catch (err) {
+      console.log(err);
+      Swal.fire("Lỗi", "Vui lòng liên hệ quản trị viên", "error");
+    }
   };
 };
 
