@@ -4,6 +4,10 @@
 
 ---
 
+## 🔗 Demo
+
+[![Live Demo](https://img.shields.io/badge/Demo-Event%20Calendar-blue?style=for-the-badge&logo=render)](https://event-calender-1-jitl.onrender.com)
+
 ## 📃 Mục lục
 
 - [📅 Event Calendar](#-event-calendar)
@@ -134,7 +138,3 @@ Truy cập: [http://localhost:3000](http://localhost:3000)
 
 **Phạm Tùng Lâm**  
 📍 [https://github.com/tunglamp08072005](https://github.com/tunglamp08072005)
-
-## 🔗 Demo
-
-[![Live Demo](https://img.shields.io/badge/Demo-Event%20Calendar-blue?style=for-the-badge&logo=render)](https://event-calender-1-jitl.onrender.com)
