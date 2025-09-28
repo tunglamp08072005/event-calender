@@ -96,7 +96,7 @@ cp .env.example .env
 Thiết lập file `.env` cho client:
 
 ```env
-REACT_APP_API_URL=https://event-calender-4sod.onrender.com/api
+REACT_APP_API_URL=http://localhost:5000/api
 ```
 
 ---
