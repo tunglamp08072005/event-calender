@@ -6,8 +6,8 @@
 
 ## 🔗 Demo
 
-[![Live Demo](https://img.shields.io/badge/Demo-Event%20Calendar-blue?style=for-the-badge&logo=render)](https://event-calender-1-jitl.onrender.com)
-[![AI Powered](https://img.shields.io/badge/AI-Powered-orange?style=for-the-badge&logo=google)](https://event-calender-1-jitl.onrender.com)
+[![Live Demo](https://img.shields.io/badge/Demo-Event%20Calendar-blue?style=for-the-badge&logo=render)](https://event-calender-1-qjcz.onrender.com)
+[![AI Powered](https://img.shields.io/badge/AI-Powered-orange?style=for-the-badge&logo=google)](https://event-calender-1-qjcz.onrender.com)
 
 ## 📃 Mục lục
 
