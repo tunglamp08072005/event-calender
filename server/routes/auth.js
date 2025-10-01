@@ -1,15 +1,16 @@
-const express = require("express");
-const { check } = require("express-validator");
+// server/routes/auth.js - ĐÃ SỬA THÀNH ES MODULES
+import express from "express";
+import { check } from "express-validator";
 
-const {
+import {
   createUser,
   loginUser,
   renewToken,
-} = require("../controllers/auth");
+} from "../controllers/auth.js";
 
-const { emailExists } = require("../helpers/databaseValidators");
-const validateFields = require("../middlewares/validateFields");
-const validateJWT = require("../middlewares/validateJWT");
+import { emailExists } from "../helpers/databaseValidators.js";
+import validateFields from "../middlewares/validateFields.js";
+import validateJWT from "../middlewares/validateJWT.js";
 
 const router = express.Router();
 
@@ -56,4 +57,4 @@ router.post(
 // Route: GET /api/auth/renew
 router.get("/renew", validateJWT, renewToken);
 
-module.exports = router;
+export default router;

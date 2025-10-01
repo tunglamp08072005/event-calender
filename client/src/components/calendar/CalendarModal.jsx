@@ -32,6 +32,7 @@ const CalendarModal = () => {
   const { activeEvent } = calendar;
 
   const [formValues, setFormValues] = useState(initEvent);
+  const [aiGenerating, setAiGenerating] = useState(false);
   const { notes, title, start, end } = formValues;
 
   useEffect(() => {
@@ -84,6 +85,58 @@ const CalendarModal = () => {
     closeModal();
   };
 
+  // 🆕 AI Title Generation Function - SỬA URL
+  const generateAITitle = async () => {
+    if (!start || !end) {
+      dispatch(setError('Vui lòng chọn thời gian trước khi sử dụng AI'));
+      return;
+    }
+
+    setAiGenerating(true);
+    try {
+      const token = localStorage.getItem("token");
+      
+      // 🆕 SỬA URL: Thêm base URL của server (port 5000)
+      const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+      
+      const response = await fetch(`${API_BASE_URL}/ai/generate-title`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-token': token
+        },
+        body: JSON.stringify({ 
+          start: start.toISOString(), 
+          end: end.toISOString(),
+          context: notes 
+        })
+      });
+
+      // 🆕 Kiểm tra response status
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.ok) {
+        setFormValues(prev => ({
+          ...prev,
+          title: data.title,
+          notes: data.description ? data.description : prev.notes
+        }));
+        dispatch(removeError());
+      } else {
+        dispatch(setError(data.msg || 'Không thể tạo tiêu đề AI'));
+      }
+    } catch (error) {
+      console.error('AI generation error:', error);
+      dispatch(setError('Lỗi kết nối AI, vui lòng thử lại'));
+    } finally {
+      setAiGenerating(false);
+    }
+  };
+
   const isFormValid = () => {
     if (title.trim().length === 0) {
       dispatch(setError("Vui lòng nhập tiêu đề"));
@@ -124,7 +177,7 @@ const CalendarModal = () => {
             onChange={handleStartDateChange}
             value={start}
             className="form__input"
-            format="MM/dd/yyyy h:mm a"  // định dạng 12h với AM/PM
+            format="MM/dd/yyyy h:mm a"
             amPmAriaLabel="Chọn AM/PM"
           />
         </div>
@@ -136,7 +189,7 @@ const CalendarModal = () => {
             value={end}
             minDate={start}
             className="form__input"
-            format="MM/dd/yyyy h:mm a"  // định dạng 12h với AM/PM
+            format="MM/dd/yyyy h:mm a"
             amPmAriaLabel="Chọn AM/PM"
           />
         </div>
@@ -144,6 +197,15 @@ const CalendarModal = () => {
         <div className="form__field">
           <label htmlFor="title" className="form__label">
             Tiêu đề sự kiện
+            <button 
+              type="button" 
+              onClick={generateAITitle}
+              disabled={aiGenerating}
+              className="ai-generate-btn"
+              title="AI gợi ý tiêu đề dựa trên thời gian và ghi chú"
+            >
+              {aiGenerating ? '🤖 Đang tạo...' : '✨ AI Gợi ý'}
+            </button>
           </label>
           <input
             autoComplete="off"
@@ -154,6 +216,7 @@ const CalendarModal = () => {
             placeholder="Sự kiện mới"
             value={title}
             onChange={handleInputChange}
+            maxLength={32}
           />
         </div>
         <div className="form__field">
@@ -166,8 +229,10 @@ const CalendarModal = () => {
             rows="5"
             id="notes"
             name="notes"
+            placeholder="Mô tả sự kiện (AI sẽ sử dụng thông tin này để gợi ý tiêu đề)"
             value={notes}
             onChange={handleInputChange}
+            maxLength={128}
           ></textarea>
         </div>
         <div className="form__submit-container">

@@ -1,4 +1,5 @@
-const moment = require("moment");
+// server/helpers/dateValidators.js - ĐÃ SỬA THÀNH ES MODULES
+import moment from "moment";
 
 // Kiểm tra xem giá trị có phải là ngày hợp lệ không
 const isDate = (value) => {
@@ -12,7 +13,7 @@ const isDateAfter = (end, start) => {
   return endDate.isAfter(startDate);
 };
 
-module.exports = {
+export {
   isDate,
   isDateAfter,
 };

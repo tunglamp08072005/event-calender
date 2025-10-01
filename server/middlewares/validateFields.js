@@ -1,4 +1,5 @@
-const { validationResult } = require("express-validator");
+// server/middlewares/validateFields.js - ĐÃ SỬA THÀNH ES MODULES
+import { validationResult } from "express-validator";
 
 const validateFields = (req, res, next) => {
   const result = validationResult(req);
@@ -15,4 +16,4 @@ const validateFields = (req, res, next) => {
   });
 };
 
-module.exports = validateFields;
+export default validateFields;

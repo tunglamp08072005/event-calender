@@ -1,5 +1,6 @@
-const Event = require("../models/Event");
-const User = require("../models/User");
+// server/helpers/databaseValidators.js - ĐÃ SỬA THÀNH ES MODULES
+import Event from "../models/Event.js";
+import User from "../models/User.js";
 
 // Kiểm tra sự tồn tại của sự kiện dựa trên ID trong URL
 const eventExistsById = async (req, res, next) => {
@@ -79,7 +80,7 @@ const emailExists = async (req, res, next) => {
   }
 };
 
-module.exports = {
+export {
   eventExistsById,
   isEventOwner,
   emailExists,

@@ -1,4 +1,5 @@
-const Event = require("../models/Event");
+// server/controllers/events.js - ĐÃ SỬA THÀNH ES MODULES
+import Event from "../models/Event.js";
 
 // Lấy danh sách tất cả sự kiện, kèm tên người tạo
 const getEvents = async (req, res) => {
@@ -127,7 +128,7 @@ const deleteEvent = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   getEvents,
   createEvent,
   updateEvent,

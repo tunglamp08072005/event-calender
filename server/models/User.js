@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+// server/models/User.js - ĐÃ SỬA THÀNH ES MODULES
+import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -29,4 +30,4 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("User", UserSchema);
+export default mongoose.model("User", UserSchema);

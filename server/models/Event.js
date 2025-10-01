@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+// server/models/Event.js - ĐÃ SỬA THÀNH ES MODULES
+import mongoose from "mongoose";
 
 const EventSchema = new mongoose.Schema(
   {
@@ -35,4 +36,5 @@ const EventSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Event", EventSchema);
+// 🆕 SỬA THÀNH EXPORT ES MODULES
+export default mongoose.model("Event", EventSchema);

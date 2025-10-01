@@ -12,10 +12,6 @@
   background: var(--color-white);
   border: 1px solid var(--color-light-gray);
   border-radius: 1rem;
-  -webkit-border-radius: 1rem;
-  -moz-border-radius: 1rem;
-  -ms-border-radius: 1rem;
-  -o-border-radius: 1rem;
   box-shadow: 0 5px 10px rgba(0, 0, 0, .25);
   color: var(--color-dark-gray);
   display: inline;
@@ -28,10 +24,6 @@
   padding: 20px;
   position: absolute;
   transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
 }
 
 .modal__background {
@@ -104,7 +96,7 @@
 
 .form__submit-container {
   display: flex;
-  justify-content: center; /* căn giữa theo chiều ngang */
+  justify-content: center;
   margin-top: 1.5rem;
 }
 
@@ -112,7 +104,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 2rem; /* đủ không gian cho nút */
+  padding: 0.75rem 2rem;
   font-weight: 600;
   font-size: 1rem;
   text-transform: uppercase;
@@ -121,9 +113,9 @@
   background-color: var(--color-primary, #007bff);
   color: white;
   transition: all 0.2s ease;
-  line-height: 1;  /* reset line height */
-  height: 44px;     /* cố định chiều cao nút */
-  min-width: 120px; /* đảm bảo nút không quá nhỏ */
+  line-height: 1;
+  height: 44px;
+  min-width: 120px;
 }
 
 .form__submit-btn:hover {
@@ -132,20 +124,12 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.calendar__search {
-  display: flex;
-  justify-content: center;
-  padding: 1rem;
-  background-color: #f5f5f5;
-}
-
 .calendar__search-input {
   width: 100%;
-  max-width: 400px;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  font-size: 14px;
   outline: none;
   transition: box-shadow 0.2s ease;
 }
@@ -162,5 +146,154 @@
   flex-direction: row;
   align-items: center;
   gap: 0.5rem;
-  z-index: 9999; /* đủ lớn để nổi trên calendar */
+  z-index: 9999;
+}
+
+/* Calendar Header & AI Styles */
+.calendar__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.calendar__search {
+  flex: 1;
+  min-width: 250px;
+}
+
+.calendar__ai-tools {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* AI Suggestions Panel */
+.ai-suggestions-panel {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+  border-left: 4px solid #007bff;
+}
+
+.ai-suggestions {
+  max-width: 100%;
+}
+
+.ai-suggestions__header {
+  margin-bottom: 15px;
+}
+
+.ai-suggestions__header h3 {
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.ai-suggestions__header p {
+  color: #666;
+  font-size: 0.9em;
+}
+
+/* AI Buttons */
+.btn-ai {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-ai:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-ai-primary {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.btn-ai-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+}
+
+.btn-ai-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Suggestions List */
+.suggestions-list {
+  margin-top: 20px;
+}
+
+.suggestions-list h4 {
+  color: #333;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 8px;
+}
+
+.suggestion-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: white;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-left: 4px solid #28a745;
+  transition: all 0.3s ease;
+}
+
+.suggestion-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.suggestion-content {
+  flex: 1;
+  margin-right: 15px;
+}
+
+.suggestion-content h5 {
+  color: #333;
+  margin: 0 0 8px 0;
+  font-size: 1.1em;
+}
+
+.suggestion-time {
+  color: #666;
+  font-size: 0.9em;
+  margin: 0 0 8px 0;
+}
+
+.suggestion-notes {
+  color: #888;
+  font-size: 0.85em;
+  margin: 0;
+  font-style: italic;
+}
+
+.btn-primary.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.85em;
+  white-space: nowrap;
 }

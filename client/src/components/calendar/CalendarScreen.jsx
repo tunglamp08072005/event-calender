@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
-import "moment/locale/vi"; // ✅ Thêm dòng này để import locale tiếng Việt
+import "moment/locale/vi";
 
 import Navbar from "../ui/Navbar";
 import CalendarEvent from "./CalendarEvent";
+import AISuggestions from "./AISuggestions"; // 🆕 Import AI Suggestions
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./calendar.css";
@@ -19,7 +20,6 @@ import {
 import AddNewBtn from "../ui/AddNewBtn";
 import DeleteBtn from "../ui/DeleteBtn";
 
-// ✅ Cài đặt locale mặc định cho moment
 moment.locale("vi");
 
 const localizer = momentLocalizer(moment);
@@ -35,9 +35,9 @@ const CalendarScreen = () => {
     localStorage.getItem("lastView") || "month"
   );
 
-  // 🔍 Tìm kiếm
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEvents, setFilteredEvents] = useState([]);
+  const [showAISuggestions, setShowAISuggestions] = useState(false); // 🆕 AI Suggestions state
 
   useEffect(() => {
     dispatch(eventStartLoading());
@@ -94,16 +94,35 @@ const CalendarScreen = () => {
     <div className="calendar">
       <Navbar />
 
-      {/* 🔍 Ô tìm kiếm */}
-      <div className="calendar__search">
-        <input
-          type="text"
-          placeholder="🔍 Tìm kiếm sự kiện..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="calendar__search-input"
-        />
+      {/* 🔍 Ô tìm kiếm & AI Tools */}
+      <div className="calendar__header">
+        <div className="calendar__search">
+          <input
+            type="text"
+            placeholder="🔍 Tìm kiếm sự kiện..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="calendar__search-input"
+          />
+        </div>
+
+        {/* 🆕 AI Tools Section */}
+        <div className="calendar__ai-tools">
+          <button 
+            className="btn btn-ai"
+            onClick={() => setShowAISuggestions(!showAISuggestions)}
+          >
+            🎯 Gợi ý AI {showAISuggestions ? '▲' : '▼'}
+          </button>
+        </div>
       </div>
+
+      {/* 🆕 AI Suggestions Panel */}
+      {showAISuggestions && (
+        <div className="ai-suggestions-panel">
+          <AISuggestions />
+        </div>
+      )}
 
       <div className="calendar__container">
         <Calendar
@@ -146,7 +165,6 @@ const CalendarScreen = () => {
           >
             ✏️
           </button>
-          {/* ⚠️ Bọc DeleteBtn bằng Fragment để không bị lệch bố cục */}
           <DeleteBtn />
         </div>
       )}

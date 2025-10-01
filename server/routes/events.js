@@ -1,25 +1,26 @@
-const { Router } = require("express");
-const { check } = require("express-validator");
+// server/routes/events.js - ĐÃ SỬA THÀNH ES MODULES
+import { Router } from "express";
+import { check } from "express-validator";
 
-const {
+import {
   getEvents,
   createEvent,
   updateEvent,
   deleteEvent,
-} = require("../controllers/events");
+} from "../controllers/events.js";
 
-const {
+import {
   eventExistsById,
   isEventOwner,
-} = require("../helpers/databaseValidators");
+} from "../helpers/databaseValidators.js";
 
-const {
+import {
   isDate,
   isDateAfter,
-} = require("../helpers/dateValidators");
+} from "../helpers/dateValidators.js";
 
-const validateFields = require("../middlewares/validateFields");
-const validateJWT = require("../middlewares/validateJWT");
+import validateFields from "../middlewares/validateFields.js";
+import validateJWT from "../middlewares/validateJWT.js";
 
 const router = Router();
 
@@ -99,4 +100,4 @@ router.delete(
   deleteEvent
 );
 
-module.exports = router;
+export default router;

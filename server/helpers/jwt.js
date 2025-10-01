@@ -1,4 +1,5 @@
-const jwt = require("jsonwebtoken");
+// server/helpers/jwt.js - ĐÃ SỬA THÀNH ES MODULES
+import jwt from "jsonwebtoken";
 
 const generateJWT = (id, name) => {
   const payload = { id, name };
@@ -19,4 +20,4 @@ const generateJWT = (id, name) => {
   });
 };
 
-module.exports = generateJWT;
+export { generateJWT };

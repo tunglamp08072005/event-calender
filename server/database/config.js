@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+// server/database/config.js - ĐÃ SỬA THÀNH ES MODULES
+import mongoose from "mongoose";
 
 // Kết nối tới cơ sở dữ liệu MongoDB
 const dbConnection = async () => {
@@ -17,4 +18,4 @@ const dbConnection = async () => {
   }
 };
 
-module.exports = dbConnection;
+export default dbConnection;

@@ -1,6 +1,7 @@
-const bcrypt = require("bcryptjs");
-const User = require("../models/User");
-const generateJWT = require("../helpers/jwt");
+// server/controllers/auth.js - ĐÃ SỬA THÀNH ES MODULES
+import bcrypt from "bcryptjs";
+import User from "../models/User.js";
+import { generateJWT } from "../helpers/jwt.js";
 
 // Đăng ký người dùng mới
 const createUser = async (req, res) => {
@@ -98,7 +99,7 @@ const renewToken = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   createUser,
   loginUser,
   renewToken,
