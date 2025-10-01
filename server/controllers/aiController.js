@@ -2,13 +2,6 @@
 import Event from '../models/Event.js';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-console.log('🔍 aiController - Environment check:');
-console.log('GEMINI_API_KEY in aiController:', 
-  process.env.GEMINI_API_KEY ? 
-  `✅ Found (${process.env.GEMINI_API_KEY.substring(0, 10)}...)` : 
-  '❌ MISSING'
-);
-
 // 🆕 VALIDATE API KEY
 let genAI = null;
 let geminiAvailable = false;
@@ -20,7 +13,6 @@ if (process.env.GEMINI_API_KEY) {
     } else {
       genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
       geminiAvailable = true;
-      console.log('✅ Gemini AI initialized successfully');
     }
   } catch (error) {
     console.error('❌ Failed to initialize Gemini:', error.message);
@@ -40,7 +32,6 @@ const validateAndTruncateTitle = (title, maxLength = 32) => {
   
   // Cắt bớt và thêm ... nếu vượt quá độ dài
   const truncated = title.substring(0, maxLength - 3) + '...';
-  console.log(`✂️ Title truncated: "${title}" -> "${truncated}"`);
   return truncated;
 };
 
@@ -119,8 +110,6 @@ const generateSmartEventTitle = (start, end, context) => {
   } else {
     description = `${activityType} được lên lịch vào ${timeOfDay} ${dayName.toLowerCase()}`;
   }
-
-  console.log(`🎯 Generated title: "${title}"`);
   
   return {
     title: title,
@@ -135,17 +124,12 @@ const callGemini = async (prompt, maxRetries = 2) => {
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      console.log(`🔄 Gemini attempt ${attempt} for prompt: ${prompt.substring(0, 100)}...`);
 
       const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-      console.log(`🚀 Using model: gemini-2.0-flash`);
       
       const result = await model.generateContent(prompt);
       const response = await result.response;
       const content = response.text();
-
-      console.log("✅ Gemini response received");
-      console.log("📄 Raw response:", content.substring(0, 200) + "...");
 
       // 🆕 IMPROVED JSON PARSING - Xử lý markdown code blocks
       let jsonString = content.trim();
@@ -162,18 +146,15 @@ const callGemini = async (prompt, maxRetries = 2) => {
       
       try {
         const parsed = JSON.parse(jsonString);
-        console.log("✅ Successfully parsed JSON from Gemini");
         return parsed;
       } catch (parseError) {
         console.error("❌ JSON parse error:", parseError.message);
-        console.log("📄 Content that failed to parse:", jsonString);
         
         // 🆕 THỬ TÌM JSON OBJECT TRONG RESPONSE
         const jsonMatch = jsonString.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
           try {
             const parsed = JSON.parse(jsonMatch[0]);
-            console.log("✅ Successfully extracted JSON from response");
             return parsed;
           } catch (secondParseError) {
             console.error("❌ Second JSON parse error:", secondParseError.message);
