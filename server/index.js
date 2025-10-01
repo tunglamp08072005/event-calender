@@ -27,8 +27,19 @@ const app = express();
 // Connect to DB
 dbConnection();
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://event-calender-1-qjcz.onrender.com",
+];
+
 app.use(cors({
-  origin: "http://localhost:3000", // client React chạy ở cổng 3000
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // Cho phép Postman
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true); // ✅ Quan trọng: trả true, cors lib sẽ set header đúng
+    }
+    return callback(new Error("CORS not allowed for " + origin));
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "x-token"],
   credentials: true
@@ -53,8 +64,8 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// SPA fallback route
-app.get("/*", (_, res) => {
+// SPA fallback chỉ dành cho route frontend, KHÔNG đè /api/*
+app.get(/^\/(?!api).*/, (_, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
