@@ -15,7 +15,7 @@ const AppRouter = () => {
 
   useEffect(() => {
     dispatch(startChecking());
-  }, []);
+  }, [dispatch]);
 
   if (checking) return <LoadingScreen />;
 
