@@ -141,7 +141,7 @@ Truy cập: [http://localhost:3000](http://localhost:3000)
 ### 🧠 Gợi Ý Tiêu Đề Thông Minh
 1. **Tạo sự kiện mới**: Nhấp vào khoảng thời gian trống trên lịch
 2. **Nhập ghi chú**: Điền mô tả sự kiện vào ô notes
-3. **AI tự động**: Tiêu đề sẽ được gợi ý tự động dựa trên ngữ cảnh
+3. **AI tự động**: Tiêu đề sẽ được gợi ý dựa trên ngữ cảnh khi bạn nhấn nút ✨ AI Gợi ý
 
 ## ⚠️ Lưu Ý Quan Trọng
 
