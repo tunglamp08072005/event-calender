@@ -39,7 +39,7 @@
 ---
 
 ## 🔗 Hình ảnh của ứng dụng
-<img width="2879" height="1619" alt="image" src="https://github.com/tunglamp08072005/event-calender/blob/master/Screenshot%202025-10-01%20184211.png" />
+<img width="2879" height="1619" alt="image" src="https://github.com/tunglamp08072005/event-calender/blob/master/screenshots/Screenshot%202025-10-01%20184211.png?raw=true" />
 
 ---
 
