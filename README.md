@@ -16,6 +16,7 @@
 - [✨ Các tính năng nổi bật](#-các-tính-năng-nổi-bật)
 - [🔗 Hình ảnh của ứng dụng](#-hình-ảnh-của-ứng-dụng)
 - [🚀 Bắt đầu](#-bắt-đầu)
+- [📦 Triển khai](#-triển-khai)
 - [🤖 Hướng dẫn sử dụng AI](#-hướng-dẫn-sử-dụng-ai)
 - [⚠️ Lưu ý quan trọng](#️-lưu-ý-quan-trọng)
 - [🛠️ Công nghệ sử dụng](#️-công-nghệ-sử-dụng)
